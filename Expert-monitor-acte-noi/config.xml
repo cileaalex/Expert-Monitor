@@ -1,0 +1,10 @@
+<Server>
+  <UserName>
+  </UserName>
+  <Password>
+  </Password>
+  <Host>www.expert-monitor.ro</Host>
+  <Port>8080</Port>
+  <RelativePath>/LexMonitor/CEOnline/</RelativePath>
+  <SavePassword>0</SavePassword>
+</Server>
