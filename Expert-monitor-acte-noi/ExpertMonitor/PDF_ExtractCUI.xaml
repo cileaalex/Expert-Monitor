@@ -7,7 +7,7 @@
   <mva:VisualBasic.Settings>
     <x:Null />
   </mva:VisualBasic.Settings>
-  <sap:VirtualizedContainerService.HintSize>1515,1009</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>1515,1001</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>PDF_ExtractCUI_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <scg:List x:TypeArguments="x:String" Capacity="56">
@@ -75,7 +75,7 @@
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </scg:List>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="PDF_ExtractCUI" sap:VirtualizedContainerService.HintSize="478,944" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="PDF_ExtractCUI" sap:VirtualizedContainerService.HintSize="426,936" sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(x:String)" Default="[new List(of string)]" Name="ListCUI" />
       <Variable x:TypeArguments="x:String" Name="loweredText" />
@@ -85,41 +85,23 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:ReadPDFText PreserveFormatting="{x:Null}" DisplayName="Read PDF Text" FileName="[in_PDF_Path]" sap:VirtualizedContainerService.HintSize="436,59" sap2010:WorkflowViewState.IdRef="ReadPDFText_1" Range="All" Text="[out_PDFText]" />
-    <Assign sap:VirtualizedContainerService.HintSize="436,60" sap2010:WorkflowViewState.IdRef="Assign_1">
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Info" Message="[&quot;Extracting CUI from PDF...&quot;]" />
+    <ui:ReadPDFText PreserveFormatting="{x:Null}" DisplayName="Read PDF Text" FileName="[in_PDF_Path]" sap:VirtualizedContainerService.HintSize="384,59" sap2010:WorkflowViewState.IdRef="ReadPDFText_1" Range="All" Text="[out_PDFText]" />
+    <Assign sap:VirtualizedContainerService.HintSize="384,60" sap2010:WorkflowViewState.IdRef="Assign_1">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[loweredText]</OutArgument>
       </Assign.To>
       <Assign.Value>
-        <InArgument x:TypeArguments="x:String">[out_pdfText.ToLower.Replace(VBNewLine," ").Replace(":","")]</InArgument>
+        <InArgument x:TypeArguments="x:String">[out_pdfText.ToLower.Replace(VBNewLine," ").Replace(":","").Replace("nr.","").Replace(".",Nothing).Replace("(",Nothing).Replace(")",Nothing)]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_cui = &quot;&quot;&#xD;&#xA;For Each m As Match In Regex.Matches(in_pdfText,&quot;(?&lt;=cui|cod unic de înregistrare|cod unic de inregistrare)\s*(\w*\d*|\D*\d*)&quot;)&#xD;&#xA;&#x9;If Not String.IsNullOrWhiteSpace(m.Value)&#xD;&#xA;&#x9;&#x9;out_cui = m.Value&#xD;&#xA;&#x9;&#x9;Exit For&#xD;&#xA;&#x9;End If&#xD;&#xA;Next&#xD;&#xA;If out_cui.Equals(&quot;&quot;)&#xD;&#xA;&#x9;For Each m As Match In Regex.Matches(in_pdfText,&quot;(?&lt;=cif ro)\s*(\w*\d*|\D*\d*)&quot;)&#xD;&#xA;&#x9;If Not String.IsNullOrWhiteSpace(m.Value)&#xD;&#xA;&#x9;&#x9;out_cui = &quot;RO&quot;+m.Value.Trim&#xD;&#xA;&#x9;&#x9;Exit For&#xD;&#xA;&#x9;End If&#xD;&#xA;Next&#xD;&#xA;End If" DisplayName="Invoke code" sap:VirtualizedContainerService.HintSize="436,164" sap2010:WorkflowViewState.IdRef="InvokeCode_2">
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="out_cui = &quot;&quot;&#xD;&#xA;For Each m As Match In Regex.Matches(in_pdfText,&quot;(?&lt;=cui ro|cod unic de înregistrare ro|cod unic de inregistrare ro)\s*(\w*\d*|\D*\d*)&quot;)&#xD;&#xA;&#x9;If Not String.IsNullOrWhiteSpace(m.Value)&#xD;&#xA;&#x9;&#x9;out_cui = &quot;RO&quot;+m.Value.Trim&#xD;&#xA;&#x9;&#x9;Exit For&#xD;&#xA;&#x9;End If&#xD;&#xA;Next&#xD;&#xA;If out_cui.Equals(&quot;&quot;)&#xD;&#xA;For Each m As Match In Regex.Matches(in_pdfText,&quot;(?&lt;=cui|cod unic de înregistrare|cod unic de inregistrare)\s*(\w*\d*|\D*\d*)&quot;)&#xD;&#xA;&#x9;If Not String.IsNullOrWhiteSpace(m.Value)&#xD;&#xA;&#x9;&#x9;out_cui = m.Value&#xD;&#xA;&#x9;&#x9;Exit For&#xD;&#xA;&#x9;End If&#xD;&#xA;Next&#xD;&#xA;End If&#xD;&#xA;If out_cui.Equals(&quot;&quot;)&#xD;&#xA;&#x9;For Each m As Match In Regex.Matches(in_pdfText,&quot;(?&lt;=cif ro|cod de înregistrare fiscală)\s*(\w*\d*|\D*\d*)&quot;)&#xD;&#xA;&#x9;If Not String.IsNullOrWhiteSpace(m.Value)&#xD;&#xA;&#x9;&#x9;out_cui = &quot;RO&quot;+m.Value.Trim&#xD;&#xA;&#x9;&#x9;Exit For&#xD;&#xA;&#x9;End If&#xD;&#xA;Next&#xD;&#xA;End If&#xD;&#xA;&#xD;&#xA;If out_cui.Equals(&quot;&quot;)&#xD;&#xA;&#x9;For Each m As Match In Regex.Matches(in_pdfText,&quot;(?&lt;=cif)\s*(\w*\d*|\D*\d*)&quot;)&#xD;&#xA;&#x9;If Not String.IsNullOrWhiteSpace(m.Value)&#xD;&#xA;&#x9;&#x9;out_cui = m.Value.Trim&#xD;&#xA;&#x9;&#x9;Exit For&#xD;&#xA;&#x9;End If&#xD;&#xA;Next&#xD;&#xA;End If" DisplayName="Invoke code" sap:VirtualizedContainerService.HintSize="384,164" sap2010:WorkflowViewState.IdRef="InvokeCode_2">
       <ui:InvokeCode.Arguments>
         <InArgument x:TypeArguments="x:String" x:Key="in_pdfText">[loweredText]</InArgument>
         <OutArgument x:TypeArguments="x:String" x:Key="out_cui">[out_CUI]</OutArgument>
       </ui:InvokeCode.Arguments>
     </ui:InvokeCode>
-    <ui:CommentOut DisplayName="Comment Out" sap:VirtualizedContainerService.HintSize="436,230" sap2010:WorkflowViewState.IdRef="CommentOut_3">
-      <ui:CommentOut.Body>
-        <Sequence DisplayName="Ignored Activities" sap:VirtualizedContainerService.HintSize="304,152" sap2010:WorkflowViewState.IdRef="Sequence_4">
-          <sap:WorkflowViewStateService.ViewState>
-            <scg:Dictionary x:TypeArguments="x:String, x:Object">
-              <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            </scg:Dictionary>
-          </sap:WorkflowViewStateService.ViewState>
-          <Assign sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_2">
-            <Assign.To>
-              <OutArgument x:TypeArguments="x:String">[out_CUI]</OutArgument>
-            </Assign.To>
-            <Assign.Value>
-              <InArgument x:TypeArguments="x:String">[System.Text.RegularExpressions.Regex.Match(loweredText,"(?&lt;=cui|cod unic de înregistrare|cod unic de inregistrare|cif)\s*(\w*\d*|\D*\d*)").Value]</InArgument>
-            </Assign.Value>
-          </Assign>
-        </Sequence>
-      </ui:CommentOut.Body>
-    </ui:CommentOut>
-    <Assign sap:VirtualizedContainerService.HintSize="436,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+    <Assign sap:VirtualizedContainerService.HintSize="384,60" sap2010:WorkflowViewState.IdRef="Assign_3">
       <Assign.To>
         <OutArgument x:TypeArguments="x:String">[out_CUI]</OutArgument>
       </Assign.To>
@@ -127,6 +109,7 @@
         <InArgument x:TypeArguments="x:String">[out_CUI.Replace(":","").Replace("-","").Trim.ToUpper]</InArgument>
       </Assign.Value>
     </Assign>
-    <ui:DeleteFileX DisplayName="Delete File" sap:VirtualizedContainerService.HintSize="436,79" sap2010:WorkflowViewState.IdRef="DeleteFileX_1" Path="[in_PDF_Path]" />
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="384,91" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Info" Message="[&quot;Deleting PDF...&quot;]" />
+    <ui:DeleteFileX DisplayName="Delete File" sap:VirtualizedContainerService.HintSize="384,79" sap2010:WorkflowViewState.IdRef="DeleteFileX_1" Path="[in_PDF_Path]" />
   </Sequence>
 </Activity>
